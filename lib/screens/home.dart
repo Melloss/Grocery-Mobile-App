@@ -1,8 +1,11 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../screens/order_tab.dart';
+import '../screens/catagory_tab.dart';
 import '../helper/color_pallet.dart';
 import '../screens/home_tab.dart';
+import '../screens/favorite_tab.dart';
+import '../screens/account_tab.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -62,10 +65,10 @@ class _HomeState extends State<Home>
         controller: tabController,
         children: [
           const HomeTab(),
-          Container(color: orange),
-          Container(color: black),
-          Container(color: black),
-          Container(color: black),
+          const CatagoryTab(),
+          const OrderTab(),
+          FavoriteTab(),
+          AccountTab(),
         ],
       ),
       bottomNavigationBar: Material(
