@@ -1,16 +1,15 @@
-# glocery_mobile_app
+# Glocery Mobile App
+This Project is job test on Avenir for Flutter Mobile App position. It takes me the whole 24hr. It was Challenging
 
-A new Flutter project.
+-> The Required UI
 
-## Getting Started
+![Screenshot from 2023-10-29 13-03-23](https://github.com/Melloss/Grocery-Mobile-App/assets/101984338/ea3e1294-48b2-4d1b-a281-4668d2f13b79)
 
-This project is a starting point for a Flutter application.
+![Screenshot from 2023-10-29 13-04-17](https://github.com/Melloss/Grocery-Mobile-App/assets/101984338/6155f11a-fcca-4293-8005-0b52cd7c2c61)
 
-A few resources to get you started if this is your first Flutter project:
+-> My Interpretation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+https://github.com/Melloss/Grocery-Mobile-App/assets/101984338/a34f1226-64b2-433f-b6e3-6fe1e60502f4
+
