@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:glocery_mobile_app/helper/color_pallet.dart';
+import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
+import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 
 class FavoriteProduct extends StatefulWidget {
+  final int id;
   final String path;
   final String title;
-  final double price;
+  final String price;
   const FavoriteProduct(
       {super.key,
       required this.path,
       required this.title,
-      required this.price});
+      required this.price,
+      required this.id});
 
   @override
   State<FavoriteProduct> createState() => _FavoriteProductState();
@@ -18,6 +22,7 @@ class FavoriteProduct extends StatefulWidget {
 
 class _FavoriteProductState extends State<FavoriteProduct> with ColorPallet {
   bool isFavorite = true;
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -42,8 +47,20 @@ class _FavoriteProductState extends State<FavoriteProduct> with ColorPallet {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Image.asset(
+                        child: Image.network(
                           widget.path,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Container(
+                                  height: 100,
+                                  alignment: Alignment.bottomCenter,
+                                  child: CircularProgressIndicator(
+                                    color: orange.withOpacity(0.5),
+                                  ));
+                            }
+                          },
                           width: 93,
                           height: 113,
                           fit: BoxFit.contain,
@@ -59,7 +76,7 @@ class _FavoriteProductState extends State<FavoriteProduct> with ColorPallet {
                           ),
                           Expanded(child: Container()),
                           Text(
-                            '\$${widget.price}',
+                            '${widget.price} birr',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -72,17 +89,28 @@ class _FavoriteProductState extends State<FavoriteProduct> with ColorPallet {
                           const SizedBox(height: 17),
                         ],
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        alignment: Alignment.bottomCenter,
+                      InkWell(
+                        onTap: () {
+                          if (!orderController.orderedProductId
+                              .contains(widget.id)) {
+                            orderController.orderedProductId.add(widget.id);
+                            orderController
+                                .products[widget.id].orderedQuantity = 1;
+                          }
+                          orderController.calculateTotlaPrice();
+                        },
                         child: Container(
-                          width: 113,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: iconColor.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(18),
+                          margin: const EdgeInsets.only(bottom: 10),
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: 113,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              color: iconColor.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: const Center(child: Text('Add To Cart')),
                           ),
-                          child: const Center(child: Text('Add To Cart')),
                         ),
                       ),
                     ],
@@ -101,6 +129,12 @@ class _FavoriteProductState extends State<FavoriteProduct> with ColorPallet {
                         setState(() {
                           isFavorite = !isFavorite;
                         });
+                        if (orderController.favoriteProductId
+                            .contains(widget.id)) {
+                          orderController.products[widget.id].isFavorite.value =
+                              false;
+                          orderController.favoriteProductId.remove(widget.id);
+                        }
                       },
                     ))
               ],

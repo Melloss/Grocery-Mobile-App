@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
+import '../helper/get_snackbar.dart';
 import '../helper/media_query.dart';
 import '../helper/color_pallet.dart';
 
+// ignore: must_be_immutable
 class OrderStatus extends StatelessWidget with ColorPallet {
   OrderStatus({super.key});
-
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +53,14 @@ class OrderStatus extends StatelessWidget with ColorPallet {
           Expanded(child: Container()),
           GestureDetector(
             onTap: () {
-              Get.offAllNamed('/home');
+              if (orderController.orderedProductId.isNotEmpty) {
+                orderController.resetEveryOrder();
+                Get.offAllNamed('/home');
+                getSnackBar('Success', 'You Ordered Successfully!');
+              } else {
+                Get.offAllNamed('/home');
+                getSnackBar('No Order', 'The Cart is Empty!');
+              }
             },
             child: Container(
               height: 60,
@@ -66,7 +76,7 @@ class OrderStatus extends StatelessWidget with ColorPallet {
               )),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );

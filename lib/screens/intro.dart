@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 
 class Intro extends StatefulWidget {
@@ -14,6 +15,9 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> with ColorPallet {
   @override
   void initState() {
+    OrderController orderController = Get.find();
+    orderController.getUser();
+    orderController.getProducts();
     Timer(
       const Duration(seconds: 2),
       () {

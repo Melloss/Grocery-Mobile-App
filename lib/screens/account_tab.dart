@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 
+// ignore: must_be_immutable
 class AccountTab extends StatelessWidget with ColorPallet {
   AccountTab({super.key});
+  OrderController orderController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,16 @@ class AccountTab extends StatelessWidget with ColorPallet {
             ),
             const SizedBox(width: 40),
             Text(
-              'Rafatul Islam',
+              orderController.user!.name,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Expanded(child: Container()),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.logout)),
+            IconButton(
+                onPressed: () {
+                  orderController.resetEveryOrder();
+                  Get.offAllNamed('/signin');
+                },
+                icon: const Icon(Icons.logout)),
             const SizedBox(width: 10),
           ],
         ),

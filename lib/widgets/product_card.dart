@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../screens/product_detail.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 
 class ProductCard extends StatefulWidget {
+  final int id;
   final String path;
   final String title;
   final double price;
-  const ProductCard(
-      {super.key,
-      required this.path,
-      required this.title,
-      required this.price});
+  const ProductCard({
+    super.key,
+    required this.path,
+    required this.title,
+    required this.price,
+    required this.id,
+  });
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> with ColorPallet {
-  bool isFavorite = false;
+  OrderController orderController = Get.find();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,7 +34,7 @@ class _ProductCardState extends State<ProductCard> with ColorPallet {
         children: [
           GestureDetector(
             onTap: () {
-              Get.toNamed('/product_detail');
+              Get.to(() => ProductDetail(id: widget.id));
             },
             child: Container(
               height: 250,
@@ -38,11 +45,23 @@ class _ProductCardState extends State<ProductCard> with ColorPallet {
               width: screenWidth(context) * 0.42,
               child: Column(
                 children: [
-                  Image.asset(
+                  Image.network(
                     widget.path,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Container(
+                            height: 100,
+                            alignment: Alignment.bottomCenter,
+                            child: CircularProgressIndicator(
+                              color: orange.withOpacity(0.5),
+                            ));
+                      }
+                    },
                     width: 120,
                     height: 141,
-                    alignment: Alignment.center,
+                    alignment: Alignment.bottomCenter,
                   ),
                   Expanded(child: Container()),
                   Container(
@@ -62,7 +81,7 @@ class _ProductCardState extends State<ProductCard> with ColorPallet {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              '\$${widget.price}',
+                              '${widget.price} birr',
                               style: Theme.of(context)
                                   .textTheme
                                   .displaySmall!
@@ -74,8 +93,13 @@ class _ProductCardState extends State<ProductCard> with ColorPallet {
                         ),
                         GestureDetector(
                           onTap: () {
-                            //TODO: Add To Cart
-                            print('add to cart');
+                            if (!orderController.orderedProductId
+                                .contains(widget.id)) {
+                              orderController.orderedProductId.add(widget.id);
+                              orderController
+                                  .products[widget.id].orderedQuantity = 1;
+                            }
+                            orderController.calculateTotlaPrice();
                           },
                           child: Text(
                             'Add to cart',
@@ -100,13 +124,24 @@ class _ProductCardState extends State<ProductCard> with ColorPallet {
             left: 10,
             child: GestureDetector(
               onTap: () {
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
+                if (orderController.products[widget.id].isFavorite.value) {
+                  orderController.favoriteProductId.remove(widget.id);
+                }
+                orderController.products[widget.id].isFavorite.value =
+                    !orderController.products[widget.id].isFavorite.value;
+
+                if (orderController.products[widget.id].isFavorite.value &&
+                    !orderController.favoriteProductId.contains(widget.id)) {
+                  orderController.favoriteProductId.add(widget.id);
+                }
               },
-              child: Icon(
-                Icons.favorite,
-                color: isFavorite ? favoriteIconColor : iconColor,
+              child: Obx(
+                () => Icon(
+                  Icons.favorite,
+                  color: orderController.products[widget.id].isFavorite.value
+                      ? favoriteIconColor
+                      : iconColor,
+                ),
               ),
             ),
           ),

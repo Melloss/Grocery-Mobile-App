@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 
 class ProductDetailCarousel extends StatefulWidget {
-  const ProductDetailCarousel({super.key});
+  final int id;
+  const ProductDetailCarousel({super.key, required this.id});
 
   @override
   State<ProductDetailCarousel> createState() => _ProductDetailCarouselState();
@@ -15,6 +17,7 @@ class _ProductDetailCarouselState extends State<ProductDetailCarousel>
     with ColorPallet {
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -49,7 +52,7 @@ class _ProductDetailCarouselState extends State<ProductDetailCarousel>
             child: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: white,
+                color: black,
               ),
               onPressed: () {
                 Get.back();
@@ -63,8 +66,8 @@ class _ProductDetailCarouselState extends State<ProductDetailCarousel>
   }
 
   _buildBackgroundImage() {
-    return Image.asset(
-      'assets/images/product_detail_backgroun_image.jpeg',
+    return Image.network(
+      '${orderController.imageBaseUrl}${orderController.products[widget.id].detailImage}',
       width: screenWidth(context),
       fit: BoxFit.fitWidth,
     );
@@ -92,7 +95,7 @@ class _ProductDetailCarouselState extends State<ProductDetailCarousel>
       width: 30,
       height: 7,
       decoration: BoxDecoration(
-        color: id == currentIndex ? white : iconColor.withOpacity(0.3),
+        color: id == currentIndex ? lightYellow : iconColor.withOpacity(0.6),
         borderRadius: BorderRadius.circular(10),
       ),
     );

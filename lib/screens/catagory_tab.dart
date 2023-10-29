@@ -23,17 +23,23 @@ class _CatagoryTabState extends State<CatagoryTab> with ColorPallet {
           ),
         ),
         const SizedBox(height: 20),
-        Wrap(
-          children: [
-            _buildCatagoryCard('assets/images/fruits2.png'),
-            _buildCatagoryCard('assets/images/vetables.png'),
-            _buildCatagoryCard('assets/images/mushrooms2.png'),
-            _buildCatagoryCard('assets/images/dairy2.png'),
-            _buildCatagoryCard('assets/images/oats2.png'),
-            _buildCatagoryCard('assets/images/breads.png'),
-            _buildCatagoryCard('assets/images/rices.png'),
-            _buildCatagoryCard('assets/images/eggs.png'),
-          ],
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: Wrap(
+              children: [
+                _buildCatagoryCard('assets/images/fruits2.png'),
+                _buildCatagoryCard('assets/images/vetables.png'),
+                _buildCatagoryCard('assets/images/mushrooms2.png'),
+                _buildCatagoryCard('assets/images/dairy2.png'),
+                _buildCatagoryCard('assets/images/oats2.png'),
+                _buildCatagoryCard('assets/images/breads.png'),
+                _buildCatagoryCard('assets/images/rices.png'),
+                _buildCatagoryCard('assets/images/eggs.png'),
+              ],
+            ),
+          ),
         )
       ],
     );
@@ -43,7 +49,7 @@ class _CatagoryTabState extends State<CatagoryTab> with ColorPallet {
     return Container(
       width: 138,
       height: 138,
-      margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28.3),
           boxShadow: [

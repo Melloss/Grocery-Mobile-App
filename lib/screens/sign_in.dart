@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart' show Bootstrap;
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
+import '../helper/get_snackbar.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -13,7 +15,10 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> with ColorPallet {
+  OrderController orderController = Get.find();
   bool showPassword = false;
+  final emailConteroller = TextEditingController();
+  final passwordConteroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,12 +87,13 @@ class _SignInState extends State<SignIn> with ColorPallet {
     return Column(
       children: [
         TextField(
+          controller: emailConteroller,
           style: const TextStyle(
             fontSize: 16,
             fontFamily: 'Poppins',
           ),
           decoration: InputDecoration(
-            hintText: 'Email...',
+            hintText: 'Phone Number e.g 0912121212',
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 23,
@@ -102,6 +108,7 @@ class _SignInState extends State<SignIn> with ColorPallet {
         ),
         const SizedBox(height: 20),
         TextField(
+          controller: passwordConteroller,
           obscureText: !showPassword,
           style: const TextStyle(
             fontSize: 16,
@@ -142,7 +149,14 @@ class _SignInState extends State<SignIn> with ColorPallet {
     return GestureDetector(
       onTap: () {
         //Todo::
-        Get.offNamed('/home');
+
+        if ('0${orderController.user?.phoneNumber.substring(3)}' ==
+                emailConteroller.text &&
+            orderController.user?.password == passwordConteroller.text) {
+          Get.offNamed('/home');
+        } else {
+          getSnackBar('Error', ' Incorrect PhoneNumber or Password');
+        }
       },
       child: Container(
         margin: const EdgeInsets.only(top: 50),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import './screens/product_detail.dart';
 import './helper/color_pallet.dart';
 import './screens/intro.dart';
 import './screens/sign_in.dart';
 import './screens/home.dart';
 import './screens/order_status.dart';
+import './helper/init_controlles.dart';
 
 class GloceryApp extends StatelessWidget with ColorPallet {
   GloceryApp({super.key});
@@ -21,7 +21,6 @@ class GloceryApp extends StatelessWidget with ColorPallet {
         '/': (context) => const Intro(),
         '/signin': (context) => const SignIn(),
         '/home': (context) => const Home(),
-        '/product_detail': (context) => const ProductDetail(),
         '/order_status': (context) => OrderStatus(),
       },
       theme: _buildThemeData(),
@@ -30,7 +29,7 @@ class GloceryApp extends StatelessWidget with ColorPallet {
 
   _buildThemeData() {
     return ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: lightYellow),
+      colorScheme: ColorScheme.fromSeed(seedColor: orange),
       tabBarTheme: TabBarTheme(
         labelColor: orange,
         unselectedLabelColor: iconColor,
@@ -82,6 +81,7 @@ class GloceryApp extends StatelessWidget with ColorPallet {
   }
 }
 
-main() {
+main() async {
+  await initControllers();
   runApp(GloceryApp());
 }

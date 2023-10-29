@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 import '../widgets/favorite_product.dart';
 
+// ignore: must_be_immutable
 class FavoriteTab extends StatelessWidget with ColorPallet {
   FavoriteTab({super.key});
-
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -18,12 +21,16 @@ class FavoriteTab extends StatelessWidget with ColorPallet {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      const FavoriteProduct(
-          path: 'assets/images/potato.png', price: 7.6, title: 'Potato'),
-      const FavoriteProduct(
-          path: 'assets/images/tomato.png', price: 10.6, title: 'Tomato'),
-      const FavoriteProduct(
-          path: 'assets/images/red_onion.jpeg', price: 4.6, title: 'Red Onion'),
+      for (int i = 0; i < orderController.favoriteProductId.length; i++)
+        FavoriteProduct(
+          id: orderController.favoriteProductId[i],
+          path:
+              '${orderController.imageBaseUrl}${orderController.products[orderController.favoriteProductId[i]].primaryImage}',
+          price: orderController
+              .products[orderController.favoriteProductId[i]].price,
+          title: orderController
+              .products[orderController.favoriteProductId[i]].title,
+        ),
     ]);
   }
 }

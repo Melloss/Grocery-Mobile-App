@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../widgets/ordered_product.dart';
 import '../helper/color_pallet.dart';
 
@@ -11,6 +12,7 @@ class OrderTab extends StatefulWidget {
 }
 
 class _OrderTabState extends State<OrderTab> with ColorPallet {
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,31 +28,36 @@ class _OrderTabState extends State<OrderTab> with ColorPallet {
             ),
           ),
           Expanded(
-            flex: 15,
+            flex: 16,
             child: Container(
               color: homeScaffoldColor,
-              child: ListView(
+              child: ListView.builder(
+                itemCount: orderController.orderedProductId.length,
+                itemBuilder: (context, index) {
+                  return OrderedProduct(
+                    id: orderController.orderedProductId[index],
+                    path:
+                        '${orderController.imageBaseUrl}${orderController.products[orderController.orderedProductId[index]].primaryImage}',
+                  );
+                },
                 physics: const BouncingScrollPhysics(),
-                children: const [
-                  OrderedProduct(path: 'assets/images/banana.png'),
-                  OrderedProduct(path: 'assets/images/mushroom.png'),
-                  OrderedProduct(path: 'assets/images/tomato.png'),
-                  OrderedProduct(path: 'assets/images/red_onion.jpeg'),
-                ],
               ),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Container(
+              padding: const EdgeInsets.only(top: 10),
               color: homeScaffoldColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Center(
-                    child: Text(
-                      'Total \$6',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    child: Obx(
+                      () => Text(
+                        'Total: ${orderController.totalPrice.value} birr',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                     ),
                   ),
                   GestureDetector(

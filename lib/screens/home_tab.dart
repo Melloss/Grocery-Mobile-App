@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/order_conteroller.dart';
 import '../helper/color_pallet.dart';
 import '../widgets/product_card.dart';
 
@@ -10,6 +12,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with ColorPallet {
+  OrderController orderController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +33,7 @@ class _HomeTabState extends State<HomeTab> with ColorPallet {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Rafatul Islam',
+            Text('${orderController.user?.name}',
                 style: Theme.of(context).textTheme.titleLarge),
             IconButton(
               onPressed: () {},
@@ -133,67 +136,31 @@ class _HomeTabState extends State<HomeTab> with ColorPallet {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: ListView(
                 physics: const BouncingScrollPhysics(),
-                children: const [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProductCard(
-                        path: 'assets/images/orange.jpeg',
-                        title: 'Orange',
-                        price: 6.7,
-                      ),
-                      ProductCard(
-                        path: 'assets/images/garlic.png',
-                        title: 'Garlic',
-                        price: 6.7,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProductCard(
-                        path: 'assets/images/mushroom.png',
-                        title: 'Broccoli',
-                        price: 6.7,
-                      ),
-                      ProductCard(
-                        path: 'assets/images/red_onion.jpeg',
-                        title: 'Red Onion',
-                        price: 6.7,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProductCard(
-                        path: 'assets/images/banana.png',
-                        title: 'Banana',
-                        price: 6.7,
-                      ),
-                      ProductCard(
-                        path: 'assets/images/tomato.png',
-                        title: 'Tomato',
-                        price: 6.7,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProductCard(
-                        path: 'assets/images/potato.png',
-                        title: 'Potato',
-                        price: 6.7,
-                      ),
-                      ProductCard(
-                        path: 'assets/images/cabbage.png',
-                        title: 'Cabbage',
-                        price: 6.7,
-                      ),
-                    ],
-                  ),
+                children: [
+                  for (int i = 0;
+                      i < orderController.products.length;
+                      i = i + 2)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ProductCard(
+                          id: orderController.products[i].id,
+                          path:
+                              '${orderController.imageBaseUrl}${orderController.products[i].primaryImage}',
+                          title: orderController.products[i].title,
+                          price:
+                              double.parse(orderController.products[i].price),
+                        ),
+                        ProductCard(
+                          id: orderController.products[i + 1].id,
+                          path:
+                              '${orderController.imageBaseUrl}${orderController.products[i + 1].primaryImage}',
+                          title: orderController.products[i + 1].title,
+                          price: double.parse(
+                              orderController.products[i + 1].price),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

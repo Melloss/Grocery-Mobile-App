@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:glocery_mobile_app/helper/color_pallet.dart';
+import '../controllers/order_conteroller.dart';
+import '../helper/color_pallet.dart';
 import '../helper/media_query.dart';
 import '../widgets/product_detail_carousel.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+  final int id;
+  const ProductDetail({super.key, required this.id});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> with ColorPallet {
-  int currentAmout = 3;
+  int currentAmout = 1;
+  OrderController orderController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          const ProductDetailCarousel(),
+          ProductDetailCarousel(
+            id: widget.id,
+          ),
           _buildDetail(),
         ],
       ),
@@ -48,27 +53,39 @@ class _ProductDetailState extends State<ProductDetail> with ColorPallet {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Fresh Orange',
+                      orderController.products[widget.id].title,
                       style: Theme.of(context).textTheme.displayLarge!.copyWith(
                             color: black,
                             fontSize: 27,
                           ),
                     ),
-                    Container(
-                      width: 120,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: lightYellow,
-                        borderRadius: BorderRadius.circular(30),
+                    InkWell(
+                      onTap: () {
+                        if (!orderController.orderedProductId
+                            .contains(widget.id)) {
+                          orderController.orderedProductId.add(widget.id);
+                        }
+                        orderController.products[widget.id].orderedQuantity =
+                            currentAmout;
+                        orderController.calculateTotlaPrice();
+                      },
+                      child: Container(
+                        width: 120,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: lightYellow,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                            child: Text(
+                          'ADD TO CART',
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    color: black,
+                                    fontSize: 11,
+                                  ),
+                        )),
                       ),
-                      child: Center(
-                          child: Text(
-                        'ADD TO CART',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              color: black,
-                              fontSize: 11,
-                            ),
-                      )),
                     ),
                   ],
                 ),
@@ -77,7 +94,7 @@ class _ProductDetailState extends State<ProductDetail> with ColorPallet {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$4.9',
+                      '${orderController.products[widget.id].price} birr',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             fontSize: 24,
                             color: lightYellow,
@@ -99,6 +116,7 @@ class _ProductDetailState extends State<ProductDetail> with ColorPallet {
                                 setState(() {
                                   currentAmout--;
                                 });
+                                orderController.calculateTotlaPrice();
                               },
                               child: Text(
                                 '-',
@@ -128,6 +146,7 @@ class _ProductDetailState extends State<ProductDetail> with ColorPallet {
                                 setState(() {
                                   currentAmout++;
                                 });
+                                orderController.calculateTotlaPrice();
                               },
                               child: Text(
                                 '+',
