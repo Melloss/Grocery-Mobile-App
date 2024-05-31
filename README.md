@@ -1,5 +1,5 @@
 # Glocery Mobile App
-This Project is job test on Avenir for Flutter Mobile App position. It takes me the whole 24hr. It was Challenging
+This Project is job test on Avenir for Flutter Mobile App position. It takes the 24hr to finish.
 
 -> The Required UI
 
